@@ -4,6 +4,7 @@ import { DialogComponent } from './dialog/dialog.component';
 import { InsertionDirective } from './dialog/insertion.directive';
 import { ConfirmComponent } from './dialog/confirm/confirm.component';
 import { AlertComponent } from './dialog/alert/alert.component';
+import { SelectBoxDirective } from '../core/directives/select-box.directive';
 
 
 
@@ -12,7 +13,11 @@ import { AlertComponent } from './dialog/alert/alert.component';
     DialogComponent,
     InsertionDirective,
     ConfirmComponent,
-    AlertComponent
+    AlertComponent,
+    SelectBoxDirective
+  ],
+  exports: [
+    SelectBoxDirective
   ],
   imports: [
     CommonModule

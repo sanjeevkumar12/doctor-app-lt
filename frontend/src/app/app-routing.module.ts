@@ -22,6 +22,8 @@ const routes: Routes = [
     data: { showHeader: false, showSidebar: false , showFooter : false
     }
   },
+  { path: 'admin',  loadChildren: () =>  import('./admin/admin.module').then(m => m.AdminModule), canActivate: [PrivateGuard]
+  },
   {path: 'not-found', component: NotfoundComponent, data: { showHeader: false, showSidebar: false, showFooter : false}},
   {path: '**', redirectTo: '/not-found',}
 ];

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogService } from '../core/dialog/dialog.service';
+import { AuthService } from '../core/services/auth.service';
+import { DialogService } from '../dialog/dialog.service';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @Component({
@@ -9,11 +10,11 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(public dialogService: DialogService) { 
+  constructor(public dialogService: DialogService, public auth : AuthService) { 
     // const dialog = this.dialogService.open(ChangePasswordComponent,{}).afterClosed.subscribe(result => {
     //   console.log('Dialog closed', result);
     // });
-    this.dialogService.alert('Hello' , 'This is the message which will be displayed in dialog');
+    this.dialogService.confirm('Change Password', 'Save');
   }
 
   ngOnInit(): void {
