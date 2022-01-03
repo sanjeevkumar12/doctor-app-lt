@@ -2,35 +2,69 @@ version: '3.9'
 
 services:
   frontend:
-    image: node:16.8
+    container_name: "Angular-Frontend"
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
     working_dir: /frontend
     volumes:
       - ./frontend:/frontend
     ports:
       - 4200:4200
-    # --host 0.0.0.0 to listen to all the interfaces from the container (dev env)
+
     command: >
-      sh -c "npm install &&
-             npx ng serve --host 0.0.0.0"
+      sh -c "npm install && npx ng serve --host 0.0.0.0"
+    networks:
+      - doctor-app-1
 
   backend:
-    image: node:16.8
+    image: node:lts
     working_dir: /backend
+    container_name: "Express-Backend"
     volumes:
       - ./backend:/backend
-    # port 3000 has to match src/proxy.conf.json
     ports:
       - 3000:3000
+    networks:
+      - doctor-app-1
     depends_on:
       - mongo
     environment:
       MONGO_HOST: mongo
+      NODE_ENV: development
+      PORT: 3000
+      MONGODB_CONNECTION_STRING: mongodb://mongo/doctor_app_v1
+      JWT_ACCESS_EXPIRATION_MINUTES: 30
+      JWT_REFRESH_EXPIRATION_DAYS: 2
+      JWT_RESET_PASSWORD_EXPIRATION_MINUTES: 15
+      JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: 5
+      SMTP_EMAIL_HOST: smtp.mailtrap.io
+      SMTP_EMAIL_PORT: 2525
+      SMTP_EMAIL_USERNAME: 4c882d203d04f1
+      SMTP_EMAIL_PASSWORD: 8e00561cb6cbb8
+      DEFAULT_EMAIL_FROM: no-reply@docjunction.com
+      JWT_SECRET: u9n2_LxfpAQewpy7JzVU7yBxNBiW9n_NCFfLGlG43BSH6TOk5cl4ZtrkPg9rOKJ6Vlq8Kk_6N3npBq59dXcBAlb5rWyM3Rh9jrHBeaasnZMs2LiVrb-mFljIyYnPr10AeQEC7FjJupefrlE0YySC11AYBprsCt7HA3A3bhpwzDKmgatiAQtSahbeJiewmdyGNhFAYK5RHONqCmpR5TungCiyZCrnTg6aDInnBcrlNFLyHS_PaJG0pfUOBjDJny4GuqBDsYRo2VKwSGJO_CpnC
+
     command: >
       sh -c "npm i -g nodemon && npm install && nodemon ./bin/www"
 
   mongo:
     image: mongo
+    container_name: "Mongo-DB"
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - doctor-app-1
 
 networks:
+  doctor-app-1:
+    external: false
   default:
     driver: doctor-app-1
+
+volumes:
+  mongodb: null
+  mongodb_config: null
