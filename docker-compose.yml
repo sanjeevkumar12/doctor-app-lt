@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  frontend:
+    image: node:16.8
+    working_dir: /frontend
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 4200:4200
+    # --host 0.0.0.0 to listen to all the interfaces from the container (dev env)
+    command: >
+      sh -c "npm install &&
+             npx ng serve --host 0.0.0.0"
+
+  backend:
+    image: node:16.8
+    working_dir: /backend
+    volumes:
+      - ./backend:/backend
+    # port 3000 has to match src/proxy.conf.json
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    environment:
+      MONGO_HOST: mongo
+    command: >
+      sh -c "npm i -g nodemon && npm install && nodemon ./bin/www"
+
+  mongo:
+    image: mongo
+
+networks:
+  default:
+    driver: doctor-app-1
