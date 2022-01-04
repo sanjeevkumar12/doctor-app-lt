@@ -1,21 +1,20 @@
 version: '3.9'
 
 services:
-  frontend:
-    container_name: "Angular-Frontend"
-    build:
-      context: .
-      dockerfile: ./docker/frontend/Dockerfile
-    working_dir: /frontend
+  clinic-frontend:
+    image: node:lts
+    working_dir: /clinic-frontend
+    container_name: "Clinic-Frontend"
     volumes:
-      - ./frontend:/frontend
+      - ./clinic-frontend:/clinic-frontend
     ports:
-      - 4200:4200
-
-    command: >
-      sh -c "npm install && npx ng serve --host 0.0.0.0"
+      - 8080:8080
     networks:
       - doctor-app-1
+    depends_on:
+      - backend
+    command: >
+      sh -c "npm i -g --force yarn && yarn install && yarn start"
 
   backend:
     image: node:lts
@@ -54,8 +53,8 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb:/data/db
-      - mongodb_config:/data/configdb
+      - ./docker/data/mongo/data:/data/db
+      - ./docker/data/mongo/mongodb_config:/data/configdb
     networks:
       - doctor-app-1
 
