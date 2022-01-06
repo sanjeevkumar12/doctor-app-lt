@@ -1,0 +1,8 @@
+<header *ngIf="showHeader"  class="app-header fixed-top">
+  <app-header *ngIf="showHeader" fxLayout="column"></app-header>
+  <app-sidebar *ngIf="showSidebar" fxLayout="column" fxFlex="300px"></app-sidebar>
+</header>    
+<div class="content" fxLayout="column" fxFlex>
+  <router-outlet></router-outlet>
+</div>
+<app-footer *ngIf="showFooter" fxLayout="column"></app-footer>

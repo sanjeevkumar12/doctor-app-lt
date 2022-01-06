@@ -1,0 +1,22 @@
+<div class="modal fade">
+	<div class="modal-dialog modal-message">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box btn-primary">
+					<i class="material-icons">&#xE876;</i>
+				</div>				
+				<h4 class="modal-title w-100">{{message.title}}</h4>	
+			</div>
+			<div class="modal-body">
+				<p class="text-center">{{message.message}}</p>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<div class="mx-auto">
+					<button *ngIf="message.type=='confirm'"  type="button" class="btn app-btn-secondary" (click)="reject($event)" data-dismiss="modal">{{message.rejectBtnText}}</button>
+					&nbsp; &nbsp;<button *ngIf="message.type=='confirm'"  type="button" class="btn btn-primary text-white" (click)="accept($event)" data-dismiss="modal">{{message.acceptBtnText}}</button>
+					<button *ngIf="message.type=='alert'"   type="button" class="btn btn-primary" (click)="closeModal(true)" data-dismiss="modal">{{message.okBtnText}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

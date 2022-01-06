@@ -1,0 +1,9 @@
+<div class="d-flex bg-light" id="wrapper">
+    <app-sidebar *ngIf="isAuthenticated"></app-sidebar>
+    <div id="page-content-wrapper">
+        <app-header *ngIf="isAuthenticated"></app-header>
+        <div class="container-fluid px-4 mt-4 bg-light">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

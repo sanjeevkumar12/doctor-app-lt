@@ -1,0 +1,140 @@
+
+<div class="pt-5" style="min-height: 100vh;">
+    <div class="app-content pt-5 p-md-3 p-lg-4">
+        
+            <div class="position-relative mb-3">
+                <div class="row g-3 justify-content-between">
+                    <div class="col-auto">
+                        <h1 class="app-page-title mb-0">Add Doctor</h1>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="app-card shadow-sm mb-4">                
+                <div class="app-card-body p-4 border-bottom">
+                    <div class="notification-content">
+                        <form [formGroup]="form" class="">
+                            <div class="conatiner-fluid">
+                                <div class="row">
+                                   
+                                    <div class="col-6 mb-3">
+									    <label for="first_name" class="form-label">First Name</label>
+									    <input formControlName="first_name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" type="text" class="form-control" name="first_name">
+                                        <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.first_name.errors?.required">First name is required</div>
+                                            <div *ngIf="f.first_name.errors?.server_error">{{f.first_name.errors?.server_error}}</div>
+                                          </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+									    <label for="last_name" class="form-label">Last Name</label>
+									    <input formControlName="last_name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }" type="text" class="form-control" name="last_name">
+									</div>
+                                    <div class="col-12 mb-3">
+									    <label for="email" class="form-label">Email</label>
+									    <input formControlName="email" id="email" name="email" type="text" class="form-control last_name" 
+                                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                                            placeholder="Email" required="required">
+                                            
+                                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.email.errors?.required">Email is required</div>
+                                            <div *ngIf="f.email.errors?.email">Email address is not valid</div>
+                                            <div *ngIf="f.email.errors?.server_error"> {{f.email.errors?.server_error}}</div>
+                                        </div>
+
+									</div>
+                                    
+                                    <div class="col-12 mb-3">
+									    <label  for="phone_number" class="form-label">Phone Number</label>
+									    <input formControlName="phone_number" type="text" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }" id="phone_number">
+                                        <div *ngIf="submitted && f.phone_number.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.phone_number.errors?.required">Phone number is required.</div>
+                                            <div *ngIf="f.phone_number.errors?.invalidNumber">This phone number is not valid.</div>
+                                            <div *ngIf="f.phone_number.errors?.server_error"> {{f.phone_number.errors?.server_error}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+									    <label for="license" class="form-label">Licence Number</label>
+									    <input formControlName="license" type="text" [ngClass]="{ 'is-invalid': submitted && f.license.errors }" class="form-control" id="license" name="license">
+                                        <div *ngIf="submitted && f.license.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.license.errors?.required">Licence Number is required</div>
+                                            <div *ngIf="f.license.errors?.minlength">Licence Number is not valid</div>
+                                            <div *ngIf="f.license.errors?.maxlength">Licence Number is not valid</div>
+                                            <div *ngIf="f.license.errors?.server_error"> {{f.license.errors?.server_error}}</div>
+                                        </div>
+									</div>
+                                    <div class="col-6 mb-3">
+									    <label for="date_of_birth" class="form-label">Date of Birth</label>
+									    <input [ngClass]="{ 'is-invalid': submitted && f.date_of_birth.errors }" formControlName="date_of_birth" type="text" class="form-control" id="date_of_birth">
+                                        <div *ngIf="submitted && f.date_of_birth.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.date_of_birth.errors?.required">Date of birth is required</div>
+                                            <div *ngIf="f.date_of_birth.errors?.email">Date of birth is required</div>
+                                            <div *ngIf="f.date_of_birth.errors?.server_error"> {{f.date_of_birth.errors?.server_error}}</div>
+                                        </div>
+									</div>
+                                    <div class="password col-6 mb-3">
+                                        <label for="password" class="form-label"> Password</label>
+                                        <input formControlName="password" id="password" name="password" type="password" class="form-control signup-password" 
+                                        [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                                        placeholder="Create a password" required="required">
+            
+            
+                                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.password.errors.required">Password is required</div>
+                                            <div *ngIf="f.password.errors.server_error"> {{f.password.errors.server_error}}</div>
+                                          </div>
+                                    </div>
+                                    <div class="password col-6 mb-3">
+                                        <label for="confirm_password" class="form-label">Password</label>
+                                        <input formControlName="confirm_password" id="confirm_password" name="confirm_password" type="password" class="form-control confirm_password" 
+                                        
+                                        [ngClass]="{ 'is-invalid': submitted && f.confirm_password.errors }"
+                                        
+                                        placeholder="Confirm password" required="required">
+            
+            
+                                        <div *ngIf="submitted && f.confirm_password.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.confirm_password.errors.required">Confirm password is required</div>
+                                            <div *ngIf="f.confirm_password.errors.server_error">{{f.confirm_password.errors.server_error}}</div>
+                                          </div>
+            
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="available_service" class="form-label" >Services Offered</label>
+                                        <select appSelectBox multiple class="form-control ms-auto" formControlName="available_service" name="available_service" id="available_service">
+                                            <option selected="">----</option>
+                                            <option *ngFor="let opt of medical_services | keyvalue" [value]="opt.key">{{opt.value}}</option>
+                                        </select> 
+                                        <div *ngIf="submitted && f.available_service.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.available_service.errors.required">Services Offered is required</div>
+                                            <div *ngIf="f.available_service.errors.server_error">{{f.available_service.errors.server_error}}</div>
+                                          </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="medical_specialities" class="form-label">Medical Specilities</label>
+                                        <select appSelectBox multiple  class="form-control  ms-auto" formControlName="medical_specialities" name="medical_specialities" id="medical_specialities">
+                                            <option selected="">----</option>
+                                            <option *ngFor="let opt of medical_specialties | keyvalue" [value]="opt.key">{{opt.value}}</option>
+                                        </select> 
+                                        <div *ngIf="submitted && f.medical_specialities.errors" class="invalid-feedback text-left">
+                                            <div *ngIf="f.medical_specialities.errors.required">Medical Specilities is required</div>
+                                            <div *ngIf="f.medical_specialities.errors.server_error">{{f.medical_specialities.errors.server_error}}</div>
+                                          </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!--//app-card-body-->
+                <div class="app-card-footer px-4 py-3">
+                    <div class="text-center mt-4">
+                        <button type="button" class="btn app-btn-secondary" (click)="handleForm()">Create</button>
+                    </div>
+                </div><!--//app-card-footer-->
+            </div><!--//app-card-->
+            
+            
+        
+</div>
+</div>
