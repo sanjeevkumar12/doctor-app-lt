@@ -11,7 +11,6 @@ import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 export class ToastContainerComponent implements OnInit {
 
   @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
-
   constructor() { }
 
   ngOnInit(): void {

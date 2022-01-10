@@ -23,10 +23,13 @@ export class ToastService {
     this.applicationRef.attachView(componentRef.hostView);
     const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
     document.querySelector('.toast-container')?.append(domElem)
-    const toast = new Toast(domElem.children[0]);
+    componentRef.instance.message = message;
+    const el_toast = domElem.children[0];
+    const toast = new Toast(el_toast);
     toast.show()
-    domElem.children[0].addEventListener('hidden.bs.toast', () => {
-      domElem.children[0].remove();
+    el_toast.addEventListener('hidden.bs.toast', () => {
+      console.log(el_toast)
+      el_toast.remove();
       this.applicationRef.detachView(componentRef.hostView);
       componentRef.destroy();
     })

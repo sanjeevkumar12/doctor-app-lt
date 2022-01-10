@@ -12,6 +12,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.toastService.message('Hello', 'succuess');
+    this.toastService.message('Hello', 'succuess');
+    this.toastService.message('Hello', 'succuess');
   }
 
 }
