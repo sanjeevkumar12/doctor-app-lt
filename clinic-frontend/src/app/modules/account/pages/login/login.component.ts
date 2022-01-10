@@ -5,12 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { TokenStorageService } from '../../../shared/services/token-storage.service';
 import { AuthService } from '../../../shared/services/auth.service';
+import { fadeInGrow, dialogAnimation, bubbleGrowAnimation, darkShadowState } from '../../../core/animations';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  animations: [bubbleGrowAnimation, darkShadowState],
+  host: { '[@darkShadowState]': '' }
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
@@ -39,15 +42,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.form.valid) {
       this.authService.login(this.f['email'].value, this.f['password'].value)
         .pipe(first())
-        .subscribe(
-          data => {
+        .subscribe({
+          next: (res: any) => {
             this.router.navigate([decodeURIComponent(this.returnUrl)]);
           },
-          error => {
+          error: (error) => {
             if (error.status == 422) {
               this.authError = error.error.errors.auth_error;
             }
-          });
+          }
+        })
     }
   }
   ngOnDestroy() {

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg text-white bg-primary py-3 px-4 border-bottom shadow-lg mb-2">
+<nav class="navbar navbar-expand-lg text-white bg-primary py-3 px-4 border-bottom shadow-lg">
     <div class="d-flex align-items-center">
         <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle" (click)="toggleSideNav()"></i>
         <h2 class="fs-4 text-white">Dashboard</h2>
@@ -22,7 +22,7 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    <li><a class="dropdown-item" (click)="logout()" href="#">Logout</a></li>
                 </ul>
             </li>
         </ul>

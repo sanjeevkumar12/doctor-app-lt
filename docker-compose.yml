@@ -15,6 +15,21 @@ services:
       - backend
     command: >
       sh -c "npm i -g --force yarn && yarn install && yarn start"
+      
+  admin-frontend:
+    image: node:lts
+    working_dir: /frontend
+    container_name: "Admin-Frontend"
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 8000:8000
+    networks:
+      - doctor-app-1
+    depends_on:
+      - backend
+    command: >
+      sh -c "npm i -g --force yarn && yarn install && yarn start"
 
   backend:
     image: node:lts

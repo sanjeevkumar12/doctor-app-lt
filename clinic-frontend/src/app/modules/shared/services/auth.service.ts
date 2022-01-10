@@ -56,6 +56,7 @@ export class AuthService {
   }
 
   logout() {
+    this.isAuthenticated$.next(false);
     this.tokenStorage.signOut()
   }
 
