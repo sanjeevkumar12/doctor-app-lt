@@ -1,5 +1,8 @@
 <section id="departments" class="departments">
     <div class="container">
+      <div *ngIf="!isAuthenticated" class="d-flex flex-row-reverse">
+           <a class="btn btn-outline-primary btn-sm" [routerLink]="['/register']" href="">Sign Up</a> <a [routerLink]="['/login']" class="btn btn-outline-primary btn-sm mx-2">Sign In</a>
+      </div>
 
       <div class="section-title">
         <h2>Departments</h2>

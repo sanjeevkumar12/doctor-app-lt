@@ -85,13 +85,13 @@ $form-select-disabled-bg:           $gray-400;
 
 $font-family-base :             'Roboto', sans-serif;
 $font-size-root   :             14px;
-$font-weight-base:            500;
-$border-radius:               .4rem;
-$border-radius-sm:            .3rem;
-$border-radius-lg:            .4rem;
-$border-radius-pill:          50rem;
-$input-btn-padding-y:         .6rem;
-$input-btn-padding-x:         .6rem;
+$font-weight-base:              400;
+$border-radius:                 .45rem;
+$border-radius-sm:              .3rem;
+$border-radius-lg:              .4rem;
+$border-radius-pill:            50rem;
+$input-btn-padding-y:           .6rem;
+$input-btn-padding-x:           .6rem;
 $input-disabled-bg:                     $gray-100;
 $form-label-margin-bottom:              .6rem;
 $form-label-font-size:                  1rem;
@@ -101,6 +101,11 @@ $form-check-input-checked-color:    $gray-900;
 $form-check-input-checked-bg-color:       $gray-500;
 $input-focus-border-color :               $gray-400;
 $input-btn-focus-box-shadow:      $gray-400;
+
+
+:focus {
+    outline: $teal;
+  }
 
 
 

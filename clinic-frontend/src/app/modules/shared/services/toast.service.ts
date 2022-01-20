@@ -11,28 +11,31 @@ export class ToastService {
   private containerComponentRef: ComponentRef<ToastContainerComponent> | null = null;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private applicationRef: ApplicationRef, private injector: Injector) {
-
+    this.getContainerComponentRef();
   }
 
   public message(message: string, type: string, delay?: 4000): void {
-
-
-    this.getContainerComponentRef();
-
+    const container_ref = this.getContainerComponentRef();
     const componentRef = this.componentFactoryResolver.resolveComponentFactory(ToastComponent).create(this.injector);
-    this.applicationRef.attachView(componentRef.hostView);
-    const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-    document.querySelector('.toast-container')?.append(domElem)
+
+    //container_ref.instance.container.createComponent(ToastComponent)
+
+    //this.applicationRef.attachView(componentRef.hostView);
+    // const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+    // document.querySelector('.toast-container')?.append(domElem)
     componentRef.instance.message = message;
-    const el_toast = domElem.children[0];
-    const toast = new Toast(el_toast);
-    toast.show()
-    el_toast.addEventListener('hidden.bs.toast', () => {
-      console.log(el_toast)
-      el_toast.remove();
-      this.applicationRef.detachView(componentRef.hostView);
-      componentRef.destroy();
-    })
+    //container_ref.instance.loadChildComponent(ToastComponent)
+    console.log(container_ref.instance.insertionPoint)
+    container_ref.instance.container.insert(componentRef.hostView)
+    // const el_toast = domElem.children[0];
+    // const toast = new Toast(el_toast);
+    // toast.show()
+    // el_toast.addEventListener('hidden.bs.toast', () => {
+    //   console.log(el_toast)
+    //   el_toast.remove();
+    //   this.applicationRef.detachView(componentRef.hostView);
+    //   componentRef.destroy();
+    // })
   }
 
   private getContainerComponentRef(): ComponentRef<ToastContainerComponent> {

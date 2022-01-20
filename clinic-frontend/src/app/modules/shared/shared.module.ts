@@ -7,6 +7,7 @@ import { HeaderComponent } from './layout/header/header.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ToastComponent } from './toast/toast.component';
 import { ToastContainerComponent } from './toast/toast-container.component';
+import { DropdownDirective } from './directives/dropdown.directive';
 
 
 
@@ -16,12 +17,13 @@ import { ToastContainerComponent } from './toast/toast-container.component';
     HeaderComponent,
     HomeComponent,
     ToastComponent,
-    ToastContainerComponent
+    ToastContainerComponent,
+    DropdownDirective,
   ],
   imports: [
     CommonModule,
     SharedRoutingModule
   ],
-  exports: [SidebarComponent, HeaderComponent, HomeComponent, ToastComponent, ToastContainerComponent],
+  exports: [SidebarComponent, HeaderComponent, HomeComponent, ToastComponent, ToastContainerComponent, DropdownDirective],
 })
 export class SharedModule { }

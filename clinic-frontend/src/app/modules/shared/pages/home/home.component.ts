@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -8,12 +9,17 @@ import { ToastService } from '../../services/toast.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private toastService: ToastService) { }
+  isAuthenticated = false;
+  constructor(private toastService: ToastService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.toastService.message('Hello', 'succuess');
-    this.toastService.message('Hello', 'succuess');
-    this.toastService.message('Hello', 'succuess');
+    // this.toastService.message('Hello', 'succuess');
+    // this.toastService.message('Hello', 'succuess');
+    // this.toastService.message('Hello', 'succuess');
+    this.authService.isAuthenticated.subscribe(
+      (isAuthenticated: boolean) => this.isAuthenticated = isAuthenticated
+    );
   }
+
 
 }
