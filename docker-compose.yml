@@ -52,10 +52,10 @@ services:
       JWT_REFRESH_EXPIRATION_DAYS: 2
       JWT_RESET_PASSWORD_EXPIRATION_MINUTES: 15
       JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: 5
-      SMTP_EMAIL_HOST: smtp.mailtrap.io
-      SMTP_EMAIL_PORT: 2525
-      SMTP_EMAIL_USERNAME: 4c882d203d04f1
-      SMTP_EMAIL_PASSWORD: 8e00561cb6cbb8
+      SMTP_EMAIL_HOST: mailhog
+      SMTP_EMAIL_PORT: 1025
+      SMTP_EMAIL_USERNAME: 
+      SMTP_EMAIL_PASSWORD:
       DEFAULT_EMAIL_FROM: no-reply@docjunction.com
       JWT_SECRET: u9n2_LxfpAQewpy7JzVU7yBxNBiW9n_NCFfLGlG43BSH6TOk5cl4ZtrkPg9rOKJ6Vlq8Kk_6N3npBq59dXcBAlb5rWyM3Rh9jrHBeaasnZMs2LiVrb-mFljIyYnPr10AeQEC7FjJupefrlE0YySC11AYBprsCt7HA3A3bhpwzDKmgatiAQtSahbeJiewmdyGNhFAYK5RHONqCmpR5TungCiyZCrnTg6aDInnBcrlNFLyHS_PaJG0pfUOBjDJny4GuqBDsYRo2VKwSGJO_CpnC
 
@@ -70,6 +70,17 @@ services:
     volumes:
       - ./docker/data/mongo/data:/data/db
       - ./docker/data/mongo/mongodb_config:/data/configdb
+    networks:
+      - doctor-app-1
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: "Mail-Server"
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
     networks:
       - doctor-app-1
 

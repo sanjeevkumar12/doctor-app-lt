@@ -7,6 +7,7 @@ const logger = require('./core/logger')
 const connectDB = require('./core/db');
 const api_router  = require('./routes');
 const handleErrors = require('../application/errors/handlers');
+const config = require('./config');
 const create_server = () => {
     const app = express();
     connectDB();
@@ -31,7 +32,7 @@ const create_server = () => {
     // error handler
     app.use(handleErrors);
 
-
+    logger.info(config)
     logger.info(`
         ################################################
             🏁  Server listening on port 🏁 
