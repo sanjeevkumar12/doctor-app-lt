@@ -1,59 +1,45 @@
-import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, Type, EmbeddedViewRef, ComponentRef } from '@angular/core';
+import { Injectable, ApplicationRef, Injector, Type, EmbeddedViewRef, ComponentRef, ViewContainerRef } from '@angular/core';
 import { DialogComponent } from './dialog.component';
 import { DialogInjector } from './dialog-injector';
 import { DialogConfig } from './dialog-config';
 import { DialogRef } from './dialog-ref';
 import { CoreModule } from '../core.module';
 import { AlertComponent } from './alert/alert.component';
+import { ConfirmComponent } from './confirm/confirm.component';
 
 @Injectable({
   providedIn: CoreModule
 })
 export class DialogService {
   dialogComponentRef!: ComponentRef<DialogComponent>;
-
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private appRef: ApplicationRef, private injector: Injector) {}
-
-  public open(componentType: Type<any>, config: DialogConfig) {
-    const dialogRef = this.appendDialogComponentToBody(config);
-
-    this.dialogComponentRef.instance.childComponentType = componentType;
-
-    return dialogRef;
+  rootViewContainer!: ViewContainerRef;
+  constructor(private appRef: ApplicationRef, private injector: Injector) {}
+  setRootViewContainerRef(viewContainerRef: ViewContainerRef) {
+    this.rootViewContainer = viewContainerRef;
   }
-
-  private appendDialogComponentToBody(config: DialogConfig) {
+  
+  public open(componentType: Type<any>, config: DialogConfig) {
     const map = new WeakMap();
     map.set(DialogConfig, config);
 
     const dialogRef = new DialogRef();
     map.set(DialogRef, dialogRef);
-
+    let componentRef = this.rootViewContainer.createComponent(DialogComponent, {injector : new DialogInjector(this.injector, map)} )
+    componentRef.instance.childComponentType = componentType;
+    componentRef.instance.onClose.subscribe(() => {
+      this.removeDialogComponentFromBody(componentRef);
+    });
     const sub = dialogRef.afterClosed.subscribe(() => {
-      this.removeDialogComponentFromBody();
+      this.removeDialogComponentFromBody(componentRef);
       sub.unsubscribe();
     });
-
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
-    const componentRef = componentFactory.create(new DialogInjector(this.injector, map));
-
-    this.appRef.attachView(componentRef.hostView);
-
-    const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-    document.body.appendChild(domElem);
-
-    this.dialogComponentRef = componentRef;
-
-    this.dialogComponentRef.instance.onClose.subscribe(() => {
-      this.removeDialogComponentFromBody();
-    });
-
+    componentRef.instance.childComponentType = componentType;
     return dialogRef;
   }
 
-  private removeDialogComponentFromBody() {
-    this.appRef.detachView(this.dialogComponentRef.hostView);
-    this.dialogComponentRef.destroy();
+  private removeDialogComponentFromBody(componentRef: ComponentRef<DialogComponent>) {
+    this.appRef.detachView(componentRef.hostView);
+    componentRef.destroy();
   }
 
   alert(title: string, message: string, callback?: CallableFunction){    
@@ -62,5 +48,15 @@ export class DialogService {
           callback(result)
         }
       });
+  }
+  confirm(title: string, message: string, options : {accept?: CallableFunction, reject?:CallableFunction}){    
+    this.open(ConfirmComponent,{title, message}).afterClosed.subscribe(result => {
+      if(result && options.accept){
+        options.accept(result)
+      }
+      if(options.reject && !result){
+        options.reject(result)
+      }      
+    });
   }
 }

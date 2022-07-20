@@ -1,14 +1,15 @@
-import { Component, Type, ComponentFactoryResolver, ViewChild, OnDestroy, HostBinding, ComponentRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Type, ViewChild, OnDestroy, HostBinding, ComponentRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { InsertionDirective } from './insertion.directive';
 import { Subject } from 'rxjs';
 import { DialogRef } from './dialog-ref';
-import { dialogAnimation, fadeInGrow , boxAnimation} from '../animations/dialog.animation';
+import { boxAnimation} from '../animations/dialog.animation';
+import { DialogConfig } from './dialog-config';
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css'],
-  animations:boxAnimation
+  animations:[boxAnimation]
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
   componentRef!: ComponentRef<any>;
@@ -22,7 +23,9 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
 
   childComponentType!: Type<any>;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private cd: ChangeDetectorRef, private dialogRef: DialogRef) {}
+  constructor(private cd: ChangeDetectorRef, private dialogRef: DialogRef, private config: DialogConfig) {
+   
+  }
 
   ngAfterViewInit() {
     this.loadChildComponent(this.childComponentType);
@@ -38,12 +41,10 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
   }
 
   loadChildComponent(componentType: Type<any>) {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
 
     let viewContainerRef = this.insertionPoint.viewContainerRef;
-    viewContainerRef.clear();
-
-    this.componentRef = viewContainerRef.createComponent(componentFactory);
+    viewContainerRef.clear()
+    this.componentRef = viewContainerRef.createComponent(componentType);
   }
 
   ngOnDestroy() {
@@ -53,6 +54,6 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
   }
 
   close() {
-    this._onClose.next();
+    this._onClose.next(null);
   }
 }
