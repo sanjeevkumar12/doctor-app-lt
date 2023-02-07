@@ -25,6 +25,7 @@ services:
     container_name: "Frontend"
     volumes:
       - ./frontend:/frontend
+      - ./frontend/node_modules:/frontend/node_modules
     ports:
       - 8800:8000
     networks:
@@ -32,7 +33,7 @@ services:
     depends_on:
       - backend
     command: >
-      sh -c "npm i -g --force yarn && yarn install && yarn start"
+      sh -c "npm start"
       
   # admin-frontend:
   #   image: node:18.14-bullseye-slim
@@ -50,7 +51,9 @@ services:
   #     sh -c "npm i -g --force yarn && yarn install && yarn start"
 
   backend:
-    image: node:18.14-bullseye-slim
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile
     working_dir: /backend
     container_name: "Express-Backend"
     volumes:
@@ -79,7 +82,7 @@ services:
       JWT_SECRET: u9n2_LxfpAQewpy7JzVU7yBxNBiW9n_NCFfLGlG43BSH6TOk5cl4ZtrkPg9rOKJ6Vlq8Kk_6N3npBq59dXcBAlb5rWyM3Rh9jrHBeaasnZMs2LiVrb-mFljIyYnPr10AeQEC7FjJupefrlE0YySC11AYBprsCt7HA3A3bhpwzDKmgatiAQtSahbeJiewmdyGNhFAYK5RHONqCmpR5TungCiyZCrnTg6aDInnBcrlNFLyHS_PaJG0pfUOBjDJny4GuqBDsYRo2VKwSGJO_CpnC
 
     command: >
-      sh -c "npm i -g nodemon && npm install && nodemon ./bin/www"
+      sh -c "npm start"
 
   mongo:
     image: mongo

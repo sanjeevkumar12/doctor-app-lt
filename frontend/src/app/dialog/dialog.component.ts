@@ -65,6 +65,6 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
   }
 
   close() {
-    this._onClose.next();
+    this._onClose.next(null);
   }
 }

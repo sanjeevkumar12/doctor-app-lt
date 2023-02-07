@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogConfig } from '../dialog-config';
+import { ConfirmDialogModel } from '../dialog-config';
 import { DialogRef } from '../dialog-ref';
 
 @Component({
@@ -9,12 +9,12 @@ import { DialogRef } from '../dialog-ref';
 })
 export class ConfirmComponent implements OnInit {
 
-  constructor(public config: DialogConfig, public dialog: DialogRef) { }
+  constructor(public config: ConfirmDialogModel, public dialog: DialogRef) { }
 
   ngOnInit(): void {
   }
 
-  onClose(action: boolean) {
-    this.dialog.close(action);
+  onClose() {
+    this.dialog.close('some value');
   }
 }

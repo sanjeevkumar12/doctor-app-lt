@@ -1,15 +1,14 @@
-import { Component, Type, ViewChild, OnDestroy, HostBinding, ComponentRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Type, ComponentFactoryResolver, ViewChild, OnDestroy, HostBinding, ComponentRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { InsertionDirective } from './insertion.directive';
 import { Subject } from 'rxjs';
 import { DialogRef } from './dialog-ref';
-import { boxAnimation} from '../animations/dialog.animation';
-import { DialogConfig } from './dialog-config';
+import { dialogAnimation, fadeInGrow , boxAnimation} from '../animations/dialog.animation';
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css'],
-  animations:[boxAnimation]
+  animations:boxAnimation
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
   componentRef!: ComponentRef<any>;
@@ -23,9 +22,7 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
 
   childComponentType!: Type<any>;
 
-  constructor(private cd: ChangeDetectorRef, private dialogRef: DialogRef, private config: DialogConfig) {
-   
-  }
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private cd: ChangeDetectorRef, private dialogRef: DialogRef) {}
 
   ngAfterViewInit() {
     this.loadChildComponent(this.childComponentType);
@@ -40,11 +37,13 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
     evt.stopPropagation();
   }
 
-  loadChildComponent(componentType: any) {
+  loadChildComponent(componentType: Type<any>) {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
 
     let viewContainerRef = this.insertionPoint.viewContainerRef;
-    viewContainerRef.clear()
-    this.componentRef = viewContainerRef.createComponent(componentType);
+    viewContainerRef.clear();
+
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
   }
 
   ngOnDestroy() {

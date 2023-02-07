@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
+
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
@@ -15,10 +16,10 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   authError: string|null = null;
 
   constructor(@Inject(DOCUMENT) private document: any, private authService : AuthService,private formBuilder: FormBuilder,
-    private router: Router) 
+    private router: Router, private renderer : Renderer2) 
     { 
-      this.document.body.classList.add('app-reset-password');
-      this.document.body.classList.add('p-0')
+      this.renderer.addClass(this.document.body, 'app-reset-password');
+      this.renderer.addClass(this.document.body, 'p-0');
       this.form = this.formBuilder.group({
       email: ['', Validators.email],
 
@@ -30,8 +31,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    this.document.body.classList.remove('app-reset-password');
-    this.document.body.classList.remove('p-0')
+    this.renderer.removeClass(this.document.body, 'app-reset-password');
+    this.renderer.removeClass(this.document.body, 'p-0');
   }
 
 

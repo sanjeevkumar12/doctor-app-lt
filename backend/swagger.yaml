@@ -1,0 +1,240 @@
+openapi: 3.0.0
+info:
+  title: User Management Node
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/v1/api/
+tags:
+  - name: Doctors
+paths:
+  /v1/doctors/:
+    get:
+      tags:
+        - Doctors
+      summary: Doctor List
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Doctors
+      summary: Create Doctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                license: ssssa12
+                phone_number: xcccc
+                available_service:
+                  - MedicalProcedure
+                medical_specialities:
+                  - Cardiovascular
+                date_of_birth: 2/31/2019
+                first_name: first_name
+                last_name: last_name
+                password: Password@123
+                confirm_password: Password@123
+                email: emsssaixslaxcaadds@gmail.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/doctors/profile:
+    get:
+      tags:
+        - Doctors
+      summary: Current Doctor Profile
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{DOC_JWT_TOKEN}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/doctors/profile/add-office:
+    post:
+      tags:
+        - Doctors
+      summary: Current Doctor Add office
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: N1 Office
+                phone_number: '9010100010'
+                email: sanj@gmail.com
+                address_line_1: address_line_1
+                address_line_2: '23'
+                zipcode: zipcode
+                state: state
+                location_mark: location_mark
+                location:
+                  type: Point
+                  coordinates:
+                    - '170'
+                    - '-80'
+                opening_hours:
+                  - day: Mon
+                    periods:
+                      start: '2021-01-09T09:30:00'
+                      end: '2021-01-09T18:30:00'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{DOC_JWT_TOKEN}}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /user:
+    get:
+      tags:
+        - default
+      summary: 'Sample endpoint: Returns details about a particular user'
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          description: (Required) ID of the user
+          example: '6972252'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-next:
+              schema:
+                type: string
+                example: esse fugiat velit eu Lorem
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: -36157512
+                name: qui exercitation quis labore
+                tag: aute est
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: -96619398
+                message: aliqua ut ad
+  /v1/auth/register:
+    post:
+      tags:
+        - default
+      summary: Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: Sanjeev
+                last_name: Kumar
+                password: Password12
+                confirm_password: Password12
+                email: sanjeev12@gmail.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/login:
+    post:
+      tags:
+        - default
+      summary: User Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                password: Password1
+                email: sanjeev12@gmail.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/forgot-password:
+    post:
+      tags:
+        - default
+      summary: Forgot password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: sanjeev12@gmail.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/me:
+    get:
+      tags:
+        - default
+      summary: User Me
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            Bearer 
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZmViYmJkZmJmZTU0OGY1ZTk5NWE3ZCIsImVtYWlsIjoic2FuamVldkBnbWFpbC5jb20iLCJ0eXBlIjoibG9naW4tdG9rZW4iLCJpcCI6Ijo6MSIsImlhdCI6MTYyNzMxMDE5MCwiZXhwIjoxNjMyNDk0MjIwfQ.jRF4bg9JXtVRzlwfWQIl9LhgxpxSylQJWa0Jw2VTA5A
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/auth/forgot-password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZmViZDJhNDE2OTNhOTQ4NDNhZGQyMSIsImVtYWlsIjoic2FuamVldjEyQGdtYWlsLmNvbSIsInR5cGUiOiJyZXNldC1wYXNzd29yZCIsImlwX2FkZHJlc3MiOiI6OjEiLCJleHAiOjE2Mjc3OTUyOTIsImlhdCI6MTYyNzM2MzI2Mn0.WyTBS6Qqqi0N2eNX8ZcTYsr-0DTrK1hmRCkkzP37uws/reset/1627363292575:
+    post:
+      tags:
+        - default
+      summary: Forgot Password Reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                new_password: Password1
+                confirm_password: Password1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

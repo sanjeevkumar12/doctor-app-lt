@@ -8,6 +8,8 @@ const connectDB = require('./core/db');
 const api_router  = require('./routes');
 const handleErrors = require('../application/errors/handlers');
 const config = require('./config');
+const setup_api_docs = require('./docs')
+
 const create_server = () => {
     const app = express();
     connectDB();
@@ -17,17 +19,20 @@ const create_server = () => {
     app.use(compression())
     app.use(express.static(path.join(__dirname, 'public')));
     app.use('/api', api_router())
+    setup_api_docs(app)
     app.get('', function (req, res) {
         res.json({
             status: 'API Its Working',
             message: 'Welcome to User Management APP crafted with love!'
         });
     });
-
+    
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {
         next(createError(404));
     });
+
+    
 
     // error handler
     app.use(handleErrors);
@@ -35,7 +40,7 @@ const create_server = () => {
     logger.info(config)
     logger.info(`
         ################################################
-            🏁  Server listening on port 🏁 
+            🏁  Server listening on port ${config.APP_PORT}🏁 
         ################################################`);
     return app
 }

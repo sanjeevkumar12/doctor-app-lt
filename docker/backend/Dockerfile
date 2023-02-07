@@ -1,10 +1,9 @@
-FROM node:lts
+FROM node:18.14-bullseye-slim
 
-RUN npm install -g @angular/cli 
-RUN mkdir /frontend && chown node:node /frontend
-RUN mkdir /frontend/node_modules && chown node:node /frontend/node_modules
-WORKDIR  /frontend
+RUN mkdir /backend && chown node:node /backend
+#RUN mkdir /backend/node_modules && chown node:node /backend/node_modules
+WORKDIR  /backend
 USER node
-COPY --chown=node:node package.json package-lock.json ./
-RUN npm ci --quiet
+COPY --chown=node:node package*.json ./
+RUN npm install --dev
 COPY --chown=node:node . .

@@ -1,5 +1,4 @@
 import { DOCUMENT } from '@angular/common';
-import { Route } from '@angular/compiler/src/core';
 import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,10 +15,10 @@ export class ForgotPasswordResetComponent implements OnInit, OnDestroy {
   authError: string|null = null;
 
   constructor(@Inject(DOCUMENT) private document: any, private authService : AuthService,private formBuilder: FormBuilder,
-    private router: Router, private route : ActivatedRoute) 
+    private router: Router, private route : ActivatedRoute, private renderer: Renderer2) 
     { 
-      this.document.body.classList.add('app-reset-password');
-      this.document.body.classList.add('p-0')
+      this.renderer.addClass(this.document.body, 'app-reset-password');
+      this.renderer.addClass(this.document.body, 'p-0');
       this.form = this.formBuilder.group({
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
@@ -32,8 +31,8 @@ export class ForgotPasswordResetComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    this.document.body.classList.remove('app-reset-password');
-    this.document.body.classList.remove('p-0')
+    this.renderer.removeClass(this.document.body, 'app-reset-password');
+    this.renderer.removeClass(this.document.body, 'p-0');
   }
 
 

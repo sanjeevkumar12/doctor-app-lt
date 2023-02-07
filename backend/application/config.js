@@ -25,7 +25,7 @@ const envVarsSchema = Joi.object().keys({
         .description('minutes after which verify email token expires'),
     SMTP_EMAIL_HOST: Joi.string().description('server that will send the emails'),
     SMTP_EMAIL_PORT: Joi.number().description('port to connect to the email server'),
-    SMTP_EMAIL_USERNAME: Joi.string().description('username for email server'),
+    SMTP_EMAIL_USERNAME: Joi.string().optional().description('username for email server'),
     SMTP_EMAIL_PASSWORD: Joi.string().description('password for email server'),
     DEFAULT_EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
 })
