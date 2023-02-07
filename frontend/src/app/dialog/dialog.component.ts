@@ -47,7 +47,7 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
     //this.modal.hide()
   }
 
-  loadChildComponent(componentType: Type<any>) {
+  loadChildComponent(componentType: any) {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
     let viewContainerRef = this.insertionPoint.viewContainerRef;
     viewContainerRef.clear();

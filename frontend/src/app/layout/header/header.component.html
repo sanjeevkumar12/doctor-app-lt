@@ -20,7 +20,7 @@
             </div><!--//app-search-box-->
             
             <div *ngIf="isAuthenticated$ | async" class="app-utilities col-auto">
-              {{user}}
+              {{user?.first_name}} {{user?.last_name}}
               <div class="app-utility-item app-notifications-dropdown dropdown">    
                 <a class="dropdown-toggle no-toggle-arrow" id="notifications-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" title="Notifications">
                   <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->

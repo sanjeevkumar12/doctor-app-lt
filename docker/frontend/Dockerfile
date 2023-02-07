@@ -1,6 +1,6 @@
-FROM node:lts
+FROM node:18.14-bullseye-slim
 
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@13 @angular/core@13
 RUN npm install -g npm
 RUN mkdir /frontend && chown node:node /frontend
 RUN mkdir /frontend/node_modules && chown node:node /frontend/node_modules

@@ -40,7 +40,7 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
     evt.stopPropagation();
   }
 
-  loadChildComponent(componentType: Type<any>) {
+  loadChildComponent(componentType: any) {
 
     let viewContainerRef = this.insertionPoint.viewContainerRef;
     viewContainerRef.clear()

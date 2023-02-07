@@ -1,22 +1,26 @@
 version: '3.9'
 
 services:
-  clinic-frontend:
-    image: node:lts
-    working_dir: /clinic-frontend
-    container_name: "Clinic-Frontend"
-    volumes:
-      - ./clinic-frontend:/clinic-frontend
-    ports:
-      - 8080:8080
-    networks:
-      - doctor-app-1
-    depends_on:
-      - backend
-    command: >
-      sh -c "npm i -g --force yarn && yarn install && yarn start"
+  # clinic-frontend:
+  #   image: node:18.14-bullseye-slim
+  #   working_dir: /clinic-frontend
+  #   container_name: "Clinic-Frontend"
+  #   volumes:
+  #     - ./clinic-frontend:/clinic-frontend
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - doctor-app-1
+  #   depends_on:
+  #     - backend
+  #   command: >
+  #     sh -c "npm i -g --force yarn && yarn install && yarn start"
   frontend:
-    image: node:lts
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
     working_dir: /frontend
     container_name: "Frontend"
     volumes:
@@ -30,23 +34,23 @@ services:
     command: >
       sh -c "npm i -g --force yarn && yarn install && yarn start"
       
-  admin-frontend:
-    image: node:lts
-    working_dir: /frontend
-    container_name: "Admin-Frontend"
-    volumes:
-      - ./frontend:/frontend
-    ports:
-      - 8000:8000
-    networks:
-      - doctor-app-1
-    depends_on:
-      - backend
-    command: >
-      sh -c "npm i -g --force yarn && yarn install && yarn start"
+  # admin-frontend:
+  #   image: node:18.14-bullseye-slim
+  #   working_dir: /frontend
+  #   container_name: "Admin-Frontend"
+  #   volumes:
+  #     - ./frontend:/frontend
+  #   ports:
+  #     - 8000:8000
+  #   networks:
+  #     - doctor-app-1
+  #   depends_on:
+  #     - backend
+  #   command: >
+  #     sh -c "npm i -g --force yarn && yarn install && yarn start"
 
   backend:
-    image: node:lts
+    image: node:18.14-bullseye-slim
     working_dir: /backend
     container_name: "Express-Backend"
     volumes:
@@ -57,6 +61,7 @@ services:
       - doctor-app-1
     depends_on:
       - mongo
+      - mailhog
     environment:
       MONGO_HOST: mongo
       NODE_ENV: development
