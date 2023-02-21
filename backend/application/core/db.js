@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const setting = require('../config')
 const mongoosePaginate = require('mongoose-paginate-v2');
 const slug = require('mongoose-slug-generator');
-const connectDB = () => {
-    mongoose.connect(setting.MONGODB_CONF.CONNECTION_STRING, setting.MONGODB_CONF.OPTIONS, ()=>{
+
+const connectDB = (app) => {
+    mongoose.connect(app.config.MONGODB_CONF.CONNECTION_STRING, app.config.MONGODB_CONF.OPTIONS, ()=>{
         console.log('connected');
     });
 
@@ -27,7 +27,7 @@ const connectDB = () => {
     const db = mongoose.connection;
     db.on('connected', function () {
         mongoose.plugin(mongoosePaginate);
-        console.log('Mongoose default connection open to ' + setting.MONGODB_CONF.CONNECTION_STRING);
+        console.log('Mongoose default connection open to ' + app.config.MONGODB_CONF.CONNECTION_STRING);
     });
 
     // If the connection throws an error

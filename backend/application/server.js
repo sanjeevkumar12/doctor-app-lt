@@ -8,18 +8,21 @@ const connectDB = require('./core/db');
 const api_router  = require('./routes');
 const handleErrors = require('../application/errors/handlers');
 const config = require('./config');
-const setup_api_docs = require('./docs')
+const swagger = require('./docs/swagger');
 
 const create_server = () => {
     const app = express();
-    connectDB();
+    app.config = config;
+    app.logger = logger;
+    connectDB(app);
+    app.swagger = new swagger(app);
     app.use(cors())
     app.use(express.json());
     app.use(express.urlencoded({extended: false}));
     app.use(compression())
+    app.use('/api', api_router(app))
+    app.swagger.serve();
     app.use(express.static(path.join(__dirname, 'public')));
-    app.use('/api', api_router())
-    setup_api_docs(app)
     app.get('', function (req, res) {
         res.json({
             status: 'API Its Working',
@@ -32,11 +35,12 @@ const create_server = () => {
         next(createError(404));
     });
 
-    
+
 
     // error handler
     app.use(handleErrors);
-
+    
+    
     logger.info(config)
     logger.info(`
         ################################################

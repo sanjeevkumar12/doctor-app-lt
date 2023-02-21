@@ -1,49 +1,14 @@
-/**
- * @swagger
- * components:
- *   schemas:
- *     Book:
- *       type: object
- *       required:
- *         - title
- *         - author
- *         - finished
- *       properties:
- *         id:
- *           type: string
- *           description: The auto-generated id of the book
- *         title:
- *           type: string
- *           description: The title of your book
- *         author:
- *           type: string
- *           description: The book author
- *         finished:
- *           type: boolean
- *           description: Whether you have finished reading the book
- *         createdAt:
- *           type: string
- *           format: date
- *           description: The date the book was added
- *       example:
- *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
- *         finished: false
- *         createdAt: 2020-03-10T04:05:06.157Z
- */
-
-
-const express = require('express');
-const api_router = express.Router();
-const api_router_v1 = require('./v1');
-
-api_router.get('', (req, res, next)=>{
-    res.send({
-        'API' : req.baseUrl + req.path
+module.exports = function (app) {
+    const express = require('express');
+    const api_router = express.Router();
+    const api_router_v1 = require('./v1')(app);
+    require('../../auth/openapi/schema').register(app);
+    require('../../doctors/openapi/schema').register(app);
+    api_router.get('', (req, res, next)=>{
+        res.send({
+            'API' : req.baseUrl + req.path
+        })
     })
-})
-
-
-api_router.use('/v1', api_router_v1);
-module.exports = api_router;
+    api_router.use('/v1', api_router_v1);
+    return api_router
+}
