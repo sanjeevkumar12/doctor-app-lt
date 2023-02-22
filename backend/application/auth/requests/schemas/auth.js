@@ -28,6 +28,12 @@ const RegisterSchema = Joi.object({
         .email()
 }).options({ abortEarly: false })
 
+const RegisterSuccessSchema = Joi.object({
+    user: RegisterSchema,
+    success : Joi.boolean(),
+    message: Joi.string()
+})
+
 const LoginSchema = Joi.object({
     password: Joi.string().required().label('Password'),
     email: Joi.string().label('Email').required()
@@ -71,5 +77,6 @@ module.exports = {
     LoginSchema,
     ChangePasswordSchema,
     ForgotPasswordSchema,
-    ResetPasswordSchema
+    ResetPasswordSchema,
+    RegisterSuccessSchema
 }

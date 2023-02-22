@@ -1,6 +1,6 @@
 <%- include('../includes/header'); %>
 
-<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:bottom;" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:bottom; width: 100%;" width="100%">
 
     <tr>
         <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
@@ -39,36 +39,30 @@
 
         </td>
     </tr>
-
     <tr>
-        <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-
-            <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;text-align:center;color:#555;">
-                An email to confirm an email.
-            </div>
-
-        </td>
-    </tr>
-
-    <tr>
-        <td align="center" style="font-size:0px;padding:10px 25px;padding-bottom:20px;word-break:break-word;">
-
-            <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;text-align:center;color:#555;">
-                Please validate your email address in order to get started using.
-            </div>
-
-        </td>
-    </tr>
-
-    <tr>
-        <td align="center" style="font-size:0px;padding:10px 25px;padding-top:30px;padding-bottom:40px;word-break:break-word;">
-
-            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+        <td align="center" style="font-size:0px;padding:10px 20px;padding-top:30px;padding-bottom:40px;word-break:break-word;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-radius:10%;border-collapse:separate;line-height:100%;background:#fcfcff;color:#555;padding: 10px; border-radius: 1rem;
+            border-collapse: separate;
+            line-height: 100%;
+            background: #fcfcff;
+            color: #555;
+            padding: 2rem .5rem;
+            border: 2px solid #f0f0f0;width: 100%;padding-bottom: 30px;" width="100%">
+                <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                        <span style="Margin:0;text-decoration:none;text-transform:none;" href="#">
+                            <p style="padding-bottom: 30px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;">
+                            Please use following code to verify your email.
+                        </p></span>
+                    </td>
+                </tr>
+                <tr><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td></tr>
                 <tr>
                     <td align="center" bgcolor="#2F67F6" role="presentation" style="border:none;border-radius:3px;color:#ffffff;cursor:auto;padding:15px 25px;" valign="middle">
-                        <a style="Margin:0;text-decoration:none;text-transform:none;" href="<%= verification_link %>"><p style="background:#2F67F6;color:#ffffff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;">
-                             Confirm Your Email
-                        </p></a>
+                        <span style="Margin:0;text-decoration:none;text-transform:none;" href="#"><p style="background:#2F67F6;color:#ffffff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:none;">
+                            <%= otp %>
+                        </p></span>
                     </td>
                 </tr>
             </table>
@@ -84,8 +78,5 @@
 
         </td>
     </tr>
-
-
 </table>
-
 <%- include('../includes/footer'); %>

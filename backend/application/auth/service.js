@@ -1,5 +1,8 @@
 const db = require('../db')
+const settings = require('../config')
+const jwt = require('jsonwebtoken');
 const {ValidationError, NotFound} = require('../errors/throwable')
+var otpGenerator = require('../../application//core/helpers/otp');
 const {send_user_verification_email, send_user_forgot_password_link } = require('../auth/emails')
 
 exports.create_user = async (req) => {
@@ -8,10 +11,25 @@ exports.create_user = async (req) => {
     if (user_exists) {
         throw new ValidationError({'email' : 'This email is not available'})
     }
+    const today = new Date();
+    const exp = new Date(today);
+    exp.setDate(today.getDate() + settings.JWT_SETTINGS.verifyEmailExpirationMinutes);
+    let jwt_token = await jwt.sign({
+        id: this._id,
+        email: this.email,
+        type: 'verify-email',
+        iat: Math.floor(Date.now() / 1000) - 30,
+        exp: parseInt(exp.getTime() / 1000),
+    }, settings.JWT_SETTINGS.secret);
+    const otp = otpGenerator(6)
+    console.log(otp)
     const user = new db.User(data);
     await user.save();
-    await send_user_verification_email(req, user)
-    return user
+    await send_user_verification_email(req, user, otp)
+    return {
+        user,
+        token : jwt_token
+    }
 }
 
 exports.get_user_by_email = async (email) => {

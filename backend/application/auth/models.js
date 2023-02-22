@@ -3,6 +3,7 @@ const settings = require('../config')
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
+const mongooseSlugPlugin = require('mongoose-slug-plugin');
 
 const {NotFound} = require('../errors/throwable');
 
@@ -60,8 +61,7 @@ const UserSchema = mongoose.Schema(
             default: false,
         },
         is_active: {type: Boolean, required: false, default: false},
-        is_blocked: {type: Boolean, required: false, default: false},
-        slug: { type: String, slug: ["first_name" , "last_name"] , unique: true }
+        is_blocked: {type: Boolean, required: false, default: false}
     },
     {
         timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'},
@@ -71,12 +71,13 @@ const UserSchema = mongoose.Schema(
                 delete ret._id
                 delete ret.__v
                 delete ret.password
+                delete ret.slug_history
             }
         }
     }
 )
 
-
+UserSchema.plugin(mongooseSlugPlugin, { tmpl: '<%=first_name%> <%=last_name%>' });
 /**
  * @description User Pre save hook
  */
@@ -85,6 +86,7 @@ UserSchema.pre('save', async function (next) {
     if (!user.isModified('password')) return next();
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt)
+    console.log(user)
     next();
 });
 
@@ -138,7 +140,13 @@ UserSchema.statics.findByToken = async function (token) {
  */
 
 UserSchema.statics.verify_email = async function (token) {
-    let token_data = await jwt.verify(token, settings.JWT_SETTINGS.secret)
+    let token_data = null;
+    try{
+        token_data = await jwt.verify(token, settings.JWT_SETTINGS.secret)
+    }
+    catch( err){
+        throw new NotFound('The given token is either invalid or expired.');
+    }
     if (!token_data.id || !token_data.type === 'verify-email') {
         throw new NotFound('The given token is either invalid or expired.');
     }

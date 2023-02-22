@@ -8,19 +8,55 @@ const auth_service  = require('../../../auth/service');
 
 
 module.exports = (app) => {
+    app.swagger.addRouteForScan(__filename)
     auth_router.get('', (req, res, next)=>{
         res.send({
             'API' : req.baseUrl + req.path
         })
     })
+    /**
+	 * @openapi
+	 *
+	 * /v1/auth/register:
+	 *   post:
+	 *     summary: Register User
+     *     operationId : register-user
+     *     produces:
+     *        - application/json
+	 *     tags:
+	 *       - Auth
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/Register'
+     *           examples:
+     *             User:
+     *               summary: User Valid Request
+     *               value:
+     *                 first_name: Adam
+     *                 last_name: William
+     *                 password: Password@12
+     *                 confirm_password: Password@12
+     *                 email: test@example.com
+	 *     responses:
+	 *       '200':
+	 *         description: User creation success
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: "#/components/schemas/RegisterSuccess"
+     *       '422':
+     *         description: User creation failed with errors
+	 */
     auth_router.post('/register', register_schema, async (req, res, next) => {
         try{
             let user = await auth_service.create_user(req)
             let message = 'Please check your email to verify your email address.'
-            res.status(201).json({user, message
+            res.status(201).json({...user, message
                 , success: true})
         }catch (error){
-            logger.error(err)
+            logger.error(error)
             next(error)
         }
     })
@@ -47,7 +83,34 @@ module.exports = (app) => {
         }
     })
     
-    
+    /**
+	 * @openapi
+	 *
+	 * /v1/auth/verify/{verifyToken}/{tokenHash}:
+	 *   get:
+	 *     summary: Verify Register User
+     *     operationId : verify-register-user
+     *     produces:
+     *        - application/json
+	 *     tags:
+	 *       - Auth
+     *     parameters:
+     *       - in : path
+     *         name: verifyToken
+     *         description: Token String
+     *       - in : path
+     *         name : tokenHash
+     *         description: Token hash
+	 *     responses:
+	 *       '200':
+	 *         description: User creation success
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: "#/components/schemas/RegisterSuccess"
+     *       '422':
+     *         description: User creation failed with errors
+	 */
     auth_router.get('/verify/:verify_token/:random_hash', async (req, res, next) => {
         try {
             let is_verified = await auth_service.verify_email_address(req.params['verify_token'])

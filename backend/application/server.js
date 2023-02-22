@@ -8,14 +8,14 @@ const connectDB = require('./core/db');
 const api_router  = require('./routes');
 const handleErrors = require('../application/errors/handlers');
 const config = require('./config');
-const swagger = require('./docs/swagger');
+const Swagger = require('./docs/swagger');
 
 const create_server = () => {
     const app = express();
     app.config = config;
     app.logger = logger;
     connectDB(app);
-    app.swagger = new swagger(app);
+    app.swagger = new Swagger(app);
     app.use(cors())
     app.use(express.json());
     app.use(express.urlencoded({extended: false}));
