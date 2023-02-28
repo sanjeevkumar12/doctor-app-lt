@@ -1,7 +1,7 @@
 module.exports = function (app){
     const auth_router = require('./auth')(app);
     const express = require('express');
-    const doc_router = require('./doctors');
+    const doc_router = require('./doctors')(app);
     const doctor_service = require('../../../doctors/service')
     const api_router_v1 = express.Router()
     api_router_v1.get('', (req, res, next)=>{

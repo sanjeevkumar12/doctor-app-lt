@@ -1,11 +1,10 @@
 const {User} = require('../auth/models')
-const {Doctor, DoctorQualification, DoctorOffice} = require('../doctors/models')
+const {Doctor, DoctorQualification, DoctorOffice, DoctorProfileRequest} = require('../doctors/models')
 
-db = {
-    User : User,
-    Doctor : Doctor,
-    DoctorQualification: DoctorQualification,
-    DoctorOffice : DoctorOffice
-}
 
-module.exports = db
+exports.User = User
+exports.Doctor = Doctor
+exports.DoctorQualification = DoctorQualification
+exports.DoctorOffice = DoctorOffice
+exports.DoctorProfileRequest = DoctorProfileRequest
+// module.exports = db

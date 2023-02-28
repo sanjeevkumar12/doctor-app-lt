@@ -51,9 +51,9 @@ module.exports = (app) => {
 	 */
     auth_router.post('/register', register_schema, async (req, res, next) => {
         try{
-            let user = await auth_service.create_user(req)
+            let user_and_token = await auth_service.create_user(req)
             let message = 'Please check your email to verify your email address.'
-            res.status(201).json({...user, message
+            res.status(201).json({...user_and_token, message
                 , success: true})
         }catch (error){
             logger.error(error)
@@ -72,7 +72,38 @@ module.exports = (app) => {
             next(error)
         }
     })
-    
+    /**
+	 * @openapi
+	 *
+	 * /v1/auth/login:
+	 *   post:
+	 *     summary: Login User
+     *     operationId : login-user
+     *     produces:
+     *        - application/json
+	 *     tags:
+	 *       - Auth
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/Login'
+     *           examples:
+     *             User:
+     *               summary: User Valid Request
+     *               value:
+     *                 email: test@example.com
+     *                 password: Password@12
+	 *     responses:
+	 *       '200':
+	 *         description: Login success
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: "#/components/schemas/LoginSuccessSchema"
+     *       '422':
+     *         description: Invalid Credential error
+	 */
     auth_router.post('/login', login_schema, async (req, res, next) => {
         try{
             let login_data = await auth_service.login_user(req)
@@ -86,8 +117,8 @@ module.exports = (app) => {
     /**
 	 * @openapi
 	 *
-	 * /v1/auth/verify/{verifyToken}/{tokenHash}:
-	 *   get:
+	 * /v1/auth/verify/{verifyToken}:
+	 *   post:
 	 *     summary: Verify Register User
      *     operationId : verify-register-user
      *     produces:
@@ -97,23 +128,36 @@ module.exports = (app) => {
      *     parameters:
      *       - in : path
      *         name: verifyToken
+     *         required: true
      *         description: Token String
-     *       - in : path
-     *         name : tokenHash
-     *         description: Token hash
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               otp:
+     *                 type: integer
+     *             required:
+     *               - otp
 	 *     responses:
 	 *       '200':
-	 *         description: User creation success
+	 *         description: Email verification
      *         content:
      *           application/json:
      *             schema:
-     *               $ref: "#/components/schemas/RegisterSuccess"
+     *               type: object
+     *               properties:
+     *                 success: 
+     *                   type: boolean
      *       '422':
-     *         description: User creation failed with errors
+     *         description: Token validation errors
 	 */
-    auth_router.get('/verify/:verify_token/:random_hash', async (req, res, next) => {
+    auth_router.post('/verify/:verify_token', async (req, res, next) => {
+        let data = req.validate_data || req.body
         try {
-            let is_verified = await auth_service.verify_email_address(req.params['verify_token'])
+            let is_verified = await auth_service.verify_email_address(req.params['verify_token'], data.otp)
             res.json(
                 {success: !!is_verified}
             )
@@ -143,6 +187,33 @@ module.exports = (app) => {
             next(err)
         }
     })
+
+    /**
+	 * @openapi
+	 *
+	 * /v1/auth/me:
+	 *   get:
+	 *     summary: Login User Detail
+     *     operationId : login-user-detail
+     *     produces:
+     *        - application/json
+	 *     tags:
+	 *       - Auth
+     *     security:
+     *       - bearerAuth : []
+	 *     responses:
+	 *       '200':
+	 *         description: Login success
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: "#/components/schemas/User"
+     *       '422':
+     *         description: Invalid Credential error
+     *         $ref: '#/components/responses/Unauthorized'
+     *       '403':
+     *         $ref: '#/components/responses/Forbidden'
+	 */
     auth_router.get('/me', user_auth_middleware, async (req, res, next) => {
         try {
             res.json(

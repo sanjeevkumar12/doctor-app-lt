@@ -47,6 +47,11 @@ const connectDB = (app) => {
             process.exit(0);
         });
     });
+
+    mongoose.set("debug", (collectionName, method, query, doc) => {
+        console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
+    });
+
     mongoose.plugin(mongoosePaginate);
     mongoose.plugin(slug);
 };

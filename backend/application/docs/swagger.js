@@ -1,3 +1,4 @@
+const { bool } = require('joi');
 const parse = require('joi-to-json')
 const file = require('../api/routes/v1/auth')
 
@@ -17,16 +18,83 @@ function swagger(app) {
         components: {
             securitySchemes: {
                 bearerAuth: {
-                    type: 'apiKey',
-                    name: 'Authorization',
+                    type: 'http',
+                    name: 'Bearer Authentication',
                     scheme: 'bearer',
+                    bearerFormat: "JWT",
                     in: 'header',
+                    description: "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer <jwt-token>\""
                 },
             },
             schemas: {
 
-            }
+            },
+            "responses": {
+                "InvalidApiRequest": {
+                  "description": "Invalid Request",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "errors": {
+                            "type": "string",
+                            "example": "Missing Authorization Token"
+                          },
+                          "success": {
+                            "type" : "boolean",
+                            example: false
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "Unauthorized": {
+                  "description": "Unauthorized",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "errors": {
+                            "type": "string",
+                            "example": "Expired token. Use the refresh token to get a new one"
+                          },
+                          "success": {
+                            "type" : "boolean",
+                            example: false
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "Forbidden": {
+                  "description": "Forbidden",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "errors": {
+                            "type": "string",
+                            "example": "You are no longer an active user here"
+                          },
+                          "success": {
+                            "type" : "boolean",
+                            example: false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
 
+        },
+        security : {
+            bearerAuth : []
         }
     };
     this.swaggerDefinition = {};

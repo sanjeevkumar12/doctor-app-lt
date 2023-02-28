@@ -13,17 +13,18 @@ exports.create_user = async (req) => {
     }
     const today = new Date();
     const exp = new Date(today);
+    const otp = otpGenerator(6)
     exp.setDate(today.getDate() + settings.JWT_SETTINGS.verifyEmailExpirationMinutes);
+    
+    const user = new db.User(data);
     let jwt_token = await jwt.sign({
-        id: this._id,
-        email: this.email,
+        otp: otp,
+        hash: user._id,
         type: 'verify-email',
         iat: Math.floor(Date.now() / 1000) - 30,
         exp: parseInt(exp.getTime() / 1000),
     }, settings.JWT_SETTINGS.secret);
-    const otp = otpGenerator(6)
-    console.log(otp)
-    const user = new db.User(data);
+    
     await user.save();
     await send_user_verification_email(req, user, otp)
     return {
@@ -37,8 +38,8 @@ exports.get_user_by_email = async (email) => {
 }
 
 
-exports.verify_email_address = async (verify_token) => {
-    return await db.User.verify_email(verify_token)
+exports.verify_email_address = async (verify_token, otp) => {
+    return await db.User.verify_email(verify_token, otp)
 }
 
 

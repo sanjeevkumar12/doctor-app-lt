@@ -139,7 +139,7 @@ UserSchema.statics.findByToken = async function (token) {
  * @returns UserSchema|null
  */
 
-UserSchema.statics.verify_email = async function (token) {
+UserSchema.statics.verify_email = async function (token, otp) {
     let token_data = null;
     try{
         token_data = await jwt.verify(token, settings.JWT_SETTINGS.secret)
@@ -147,10 +147,10 @@ UserSchema.statics.verify_email = async function (token) {
     catch( err){
         throw new NotFound('The given token is either invalid or expired.');
     }
-    if (!token_data.id || !token_data.type === 'verify-email') {
+    if (!token_data.hash || !token_data.type === 'verify-email'|| parseInt(otp)!==parseInt(token_data.otp)) {
         throw new NotFound('The given token is either invalid or expired.');
     }
-    let user = await this.findOne({"_id": token_data.id})
+    let user = await this.findOne({"_id": token_data.hash})
     if (user && user.is_email_verified === false && token_data.type === 'verify-email') {
         user.is_active = true;
         user.is_email_verified = true;

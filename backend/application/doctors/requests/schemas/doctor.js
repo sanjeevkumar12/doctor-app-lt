@@ -2,6 +2,46 @@ const Joi = require('joi');
 const {MedicalSpeciality, WEEKDAYS, MedicalServices} = require('../../constants')
 const {valid_password} = require('../../../core/helpers/validator')
 
+
+const DoctorEducationSchema = Joi.object({
+    name: Joi.string().label('title')
+    .min(3)
+    .max(200)
+    .required(),
+    institute: Joi.string().label('institute')
+    .min(3)
+    .max(200)
+    .required(),
+    year_of_passing : Joi.date().required().label('Year of passing').options({convert: true}),
+})
+
+
+const DoctorProfileRequestSchema = Joi.object({
+    license: Joi.string().label('Licence')
+        .min(3)
+        .max(30)
+        .required(),
+
+    phone_number: Joi.string().label('Phone Number')
+        .min(8)
+        .max(12)
+        .required(),
+    available_services : Joi.array().label('Services Offered').items(Joi.string().valid(...MedicalServices.choices)).required(),
+    medical_specialities:Joi.array().label('Medical Specialities').items(Joi.string().valid(...MedicalSpeciality.choices)).required(),
+    date_of_birth: Joi.date().required().label('Date of Birth').options({convert: true}),
+    first_name: Joi.string().label('First Name')
+        .min(3)
+        .max(30)
+        .required(),
+    last_name: Joi.string().label('Last Name')
+        .min(3)
+        .max(30)
+        .required(),
+    email: Joi.string().label('Email').required()
+        .email(),
+    educations : Joi.array().items(DoctorEducationSchema).required()
+}).options({abortEarly: false})
+
 const DoctorCreateSchema = Joi.object({
     license: Joi.string().label('Licence')
         .min(3)
@@ -67,23 +107,8 @@ const DoctorOfficeCreateSchema = Joi.object({
     is_active: Joi.string().default(true)
 });
 
-// Joi.object({
-//     type: Joi.string()
-//         .required()
-//         .valid(["Point"]),
-//     coordinates: Joi.array().ordered([
-//         Joi.number()
-//             .min(-180)
-//             .max(180)
-//             .required(),
-//         Joi.number()
-//             .min(-90)
-//             .max(90)
-//             .required()
-//     ])
-// }).description("Please use this format [ longitude, latitude]"),
-
 module.exports = {
     DoctorCreateSchema,
-    DoctorOfficeCreateSchema
+    DoctorOfficeCreateSchema,
+    DoctorProfileRequestSchema
 }

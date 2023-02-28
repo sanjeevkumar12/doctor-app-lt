@@ -175,11 +175,33 @@ class MedicalSpecialityClass {
         return Object.keys(this.labels);
     }
 }
+
+class DoctorProfileStatusClass{
+    constructor(){
+        this.PENDING = 'Pending'
+        this.CONFIRMED = 'Confirmed'
+        this.VERIFIED = 'Verified'
+        this.REJECTED = 'Rejected'
+    }
+    get labels() {
+        let obj = new Object()
+        obj[this.PENDING] = 'Pending';
+        obj[this.CONFIRMED] = 'Confirmed';
+        obj[this.VERIFIED] = 'Verified';
+        obj[this.REJECTED] = 'Rejected';
+        return obj
+    }
+    get choices() {
+        return Object.keys(this.labels);
+    }
+}
 const MedicalSpeciality = Object.freeze(new MedicalSpecialityClass())
 const MedicalServices = Object.freeze(new AvailableMedicalServicesClass())
+const DoctorProfileStatus = Object.freeze(new DoctorProfileStatusClass())
 
 module.exports = {
     MedicalSpeciality,
     MedicalServices,
-    WEEKDAYS
+    WEEKDAYS,
+    DoctorProfileStatus
 }

@@ -1,6 +1,26 @@
 const Joi = require('joi');
 const {valid_password} = require('../../../core/helpers/validator')
 
+const UserSchema = Joi.object({
+    first_name: Joi.string().label('First Name')
+        .min(3)
+        .max(30)
+        .required(),
+
+    last_name: Joi.string().label('Last Name')
+        .min(3)
+        .max(30)
+        .required(),
+    id : Joi.string().required(),
+
+    email: Joi.string().label('Email').required()
+        .email(),
+    is_super_admin : Joi.bool(),
+    is_active : Joi.bool(),
+    is_blocked : Joi.bool(),
+    created_at: Joi.date()
+}).options({ abortEarly: false })
+
 const RegisterSchema = Joi.object({
     first_name: Joi.string().label('First Name')
         .min(3)
@@ -29,11 +49,12 @@ const RegisterSchema = Joi.object({
 }).options({ abortEarly: false })
 
 const RegisterSuccessSchema = Joi.object({
-    user: RegisterSchema,
+    user: UserSchema,
+    token: Joi.string(),
     success : Joi.boolean(),
     message: Joi.string()
 })
-
+const LoginSuccessSchema = RegisterSuccessSchema
 const LoginSchema = Joi.object({
     password: Joi.string().required().label('Password'),
     email: Joi.string().label('Email').required()
@@ -78,5 +99,7 @@ module.exports = {
     ChangePasswordSchema,
     ForgotPasswordSchema,
     ResetPasswordSchema,
-    RegisterSuccessSchema
+    RegisterSuccessSchema,
+    LoginSuccessSchema,
+    UserSchema
 }

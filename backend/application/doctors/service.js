@@ -2,6 +2,7 @@ const db = require('../db')
 const {ValidationError, NotFound} = require('../errors/throwable')
 const auth_service = require('../auth/service')
 const constants = require('./constants');
+const { query } = require('../core/logger');
 
 const create_doc = async (req) => {
     let doc_exists = await db.Doctor.findOne({license: req.validate_data.license})
@@ -21,6 +22,36 @@ const create_doc = async (req) => {
     data.user = user._id;
     let doc = new db.Doctor(data)
     return doc.save()
+}
+
+const create_profile_request = async (req) => {
+    let doc_exists = await db.Doctor.findOne({license: req.validate_data.license})
+    let doc_request_exists = await db.DoctorProfileRequest.findOne({license: req.validate_data.license})
+    let errors = {}
+    if (doc_exists || doc_request_exists) {
+        errors.licence = 'This licence cannot be used please try with other licence.'
+    }
+    if (Object.keys(errors).length > 0){
+        throw new ValidationError(errors)
+    }
+    let data = req.validate_data || req.body
+    let doc = new db.DoctorProfileRequest(data)
+    await doc.save()
+    return doc
+}
+
+const profile_requests = async (req) => {
+    let query = {}
+    let page = req.query.page || 1
+    let limit = req.query.item_per_page || 3
+    let sort_field = req.query.sort || 'createdAt'
+    let direction = req.query.sort_dir  && req.query.sort_dir == 'asc'  ? 1 : -1
+    let search = req.query.search || null
+    if (search){
+        query = { $or: [{ license: { '$regex':search , '$options' : 'i'}}, { email: { '$regex':search , '$options' : 'i'} }, { phone_number: { '$regex':search , '$options' : 'i'} }] }
+    }
+    console.log(direction)
+    return await db.DoctorProfileRequest.paginate(query , {page , limit, lean: false , sort : {[sort_field]: direction}})
 }
 
 const verify_email_address =  async (verify_token) => {
@@ -53,7 +84,9 @@ module.exports = {
     verify_email_address,
     get_doctor_from_token,
     add_office_to_doctor,
-    configuration
+    configuration,
+    create_profile_request,
+    profile_requests
 }
 
 
